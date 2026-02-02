@@ -1,39 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Valentine 💘</title>
+<title>Anja 💖</title>
+
 <style>
   body{
-    height:100vh;margin:0;overflow:hidden;
-    display:flex;align-items:center;justify-content:center;
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    height:100vh;
+    margin:0;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    color:white;
   }
-  .container{ text-align:center; }
-  h1{ color:#fff; font-size:2.2rem; margin:0 0 28px; padding:0 16px; }
+
+  .card{
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 22px;
+    padding: 26px 20px 30px;
+    text-align:center;
+    width:min(460px,92vw);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+  }
+
+  .photo{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid rgba(255,255,255,0.65);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    margin-bottom:14px;
+  }
+
+  h1{
+    margin: 8px 0 10px;
+    font-size: 2.15rem;
+    line-height:1.15;
+  }
+
+  .text{
+    font-size:1.07rem;
+    margin-bottom:22px;
+    padding: 0 10px;
+    opacity:0.98;
+  }
+
+  .buttons{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+
   button{
-    padding:14px 34px; font-size:1.1rem;
-    border:0; border-radius:10px; cursor:pointer;
+    padding:14px 30px;
+    font-size:1.05rem;
+    border:none;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+    transition: transform 0.08s ease-in-out;
   }
-  #yesBtn{ background:#28a745; color:#fff; margin-right:16px; }
-  #noBtn{ background:#dc3545; color:#fff; position:fixed; left:60%; top:55%; }
+  button:active{
+    transform: scale(0.98);
+  }
+
+  #yes{
+    background:#28a745;
+    color:white;
+  }
+
+  #no{
+    background:#dc3545;
+    color:white;
+    position:fixed;
+    left:60%;
+    top:60%;
+  }
+
+  .hint{
+    margin-top:16px;
+    font-size:0.9rem;
+    opacity:0.85;
+  }
+
+  /* Floating hearts */
+  .heart{
+    position:fixed;
+    bottom:-30px;
+    font-size:18px;
+    pointer-events:none;
+    user-select:none;
+    animation: floatUp linear forwards;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,0.18));
+  }
+
+  @keyframes floatUp{
+    from{
+      transform:translateY(0) translateX(0) scale(1);
+      opacity:0.95;
+    }
+    to{
+      transform:translateY(-120vh) translateX(var(--drift)) scale(1.6);
+      opacity:0;
+    }
+  }
 </style>
 </head>
+
 <body>
 
-<div class="container">
-  <h1>Will You Be My Valentine? 💖</h1>
-  <button id="yesBtn">Yes</button>
-  <button id="noBtn">No</button>
+<div class="card" id="card">
+  <img src="anja.jpeg" alt="Anja" class="photo"/>
+
+  <h1>Anja 💖</h1>
+
+  <div class="text">
+    Naredil sem tole majhno igrico samo zate.<br><br>
+    <b>Bi bila moja valentinova? 🌹</b>
+  </div>
+
+  <div class="buttons">
+    <button id="yes">Ja 💕</button>
+    <button id="no" aria-label="Ne">Ne</button>
+  </div>
+
+  <div class="hint">
+    (namig: “Ne” je precej sramežljiv 😄)
+  </div>
 </div>
 
 <script>
-  const noBtn = document.getElementById("noBtn");
-  const yesBtn = document.getElementById("yesBtn");
+  /*********************
+   * Floating hearts
+   *********************/
+  const hearts = ["💖","💘","💕","💗","💞","💓"];
+  function spawnHeart(){
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    h.style.left = Math.random()*100 + "vw";
+    h.style.animationDuration = (6 + Math.random()*6) + "s";
+    h.style.setProperty("--drift", (Math.random()*120 - 60) + "px");
+    h.style.fontSize = (14 + Math.random()*18) + "px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(), 13000);
+  }
+  setInterval(spawnHeart, 450);
 
-  function moveNoButton() {
+  /*********************
+   * "Ne" button dodge (desktop + mobile)
+   *********************/
+  const noBtn = document.getElementById("no");
+
+  function moveNo(){
     const padding = 12;
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
@@ -46,26 +175,34 @@
   }
 
   // Desktop hover
-  noBtn.addEventListener("mouseenter", moveNoButton);
+  noBtn.addEventListener("mouseenter", moveNo);
 
   // Mobile touch
   noBtn.addEventListener("touchstart", (e) => {
     e.preventDefault();
-    moveNoButton();
-  }, { passive: false });
+    moveNo();
+  }, { passive:false });
 
-  // Extra: if they try to click it anyway
+  // Extra: if they somehow click it
   noBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    moveNoButton();
+    moveNo();
   });
 
-  yesBtn.addEventListener("click", () => {
-    document.body.innerHTML = `
-      <div style="height:100vh;display:flex;justify-content:center;align-items:center;
-        background:linear-gradient(135deg,#ff9a9e,#fad0c4);color:white;font-family:Arial;text-align:center;">
-        <h1>Yay! 💘🥰<br>Happy Valentine’s Day!</h1>
-      </div>`;
+  /*********************
+   * "Ja" success screen
+   *********************/
+  document.getElementById("yes").addEventListener("click", () => {
+    document.getElementById("card").innerHTML = `
+      <h1>Jaaa! 💘🥰</h1>
+      <p class="text">
+        Pravkar si mi polepšala dan.<br><br>
+        Zdaj mi samo še povej… kdaj greva na zmenek? ☕🌙
+      </p>
+      <p class="hint" style="margin-top:18px;">
+        — tvoj Goran 💖
+      </p>
+    `;
   });
 </script>
 
