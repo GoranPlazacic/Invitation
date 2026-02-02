@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentine 💘</title>
+<style>
+  body{
+    height:100vh;margin:0;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  }
+  .container{ text-align:center; }
+  h1{ color:#fff; font-size:2.2rem; margin:0 0 28px; padding:0 16px; }
+  button{
+    padding:14px 34px; font-size:1.1rem;
+    border:0; border-radius:10px; cursor:pointer;
+  }
+  #yesBtn{ background:#28a745; color:#fff; margin-right:16px; }
+  #noBtn{ background:#dc3545; color:#fff; position:fixed; left:60%; top:55%; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Will You Be My Valentine? 💖</h1>
+  <button id="yesBtn">Yes</button>
+  <button id="noBtn">No</button>
+</div>
+
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+
+  function moveNoButton() {
+    const padding = 12;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    const x = Math.max(padding, Math.floor(Math.random() * maxX));
+    const y = Math.max(padding, Math.floor(Math.random() * maxY));
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top  = y + "px";
+  }
+
+  // Desktop hover
+  noBtn.addEventListener("mouseenter", moveNoButton);
+
+  // Mobile touch
+  noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveNoButton();
+  }, { passive: false });
+
+  // Extra: if they try to click it anyway
+  noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    moveNoButton();
+  });
+
+  yesBtn.addEventListener("click", () => {
+    document.body.innerHTML = `
+      <div style="height:100vh;display:flex;justify-content:center;align-items:center;
+        background:linear-gradient(135deg,#ff9a9e,#fad0c4);color:white;font-family:Arial;text-align:center;">
+        <h1>Yay! 💘🥰<br>Happy Valentine’s Day!</h1>
+      </div>`;
+  });
+</script>
+
+</body>
+</html>
